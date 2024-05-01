@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/src/models/BalanceModel.dart';
+import 'package:flutter_application_1/src/models/contactsModel.dart';
+import 'package:flutter_application_1/src/pages/settings/settings_controller.dart';
+import 'package:flutter_application_1/src/pages/settings/settings_service.dart';
+import 'package:provider/provider.dart';
 
 import 'src/app.dart';
-import 'src/settings/settings_controller.dart';
-import 'src/settings/settings_service.dart';
 
 void main() async {
   // Set up the SettingsController, which will glue user settings to multiple
@@ -16,5 +19,11 @@ void main() async {
   // Run the app and pass in the SettingsController. The app listens to the
   // SettingsController for changes, then passes it further down to the
   // SettingsView.
-  runApp(MyApp(settingsController: settingsController));
+
+  runApp(
+    MultiProvider(providers: [
+      Provider(create: (context) => ContactsModel()),
+      ChangeNotifierProvider(create: (context) => BalancesModel())
+    ], child: MyApp(settingsController: settingsController)),
+  );
 }
