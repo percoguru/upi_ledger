@@ -42,22 +42,23 @@ class _BalancesWidgetState extends State<HomePageView>
     List<Expense> expenses = balancesModel.expenses;
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Splitty'),
+          leading: const CircleAvatar(
+                  // Display the Flutter Logo image asset.
+                  foregroundImage: AssetImage('assets/images/random_png.png'),
+                ),
+          title: const Text(
+             "Splitty",
+              style: TextStyle(
+                fontFamily: AutofillHints.creditCardType,
+                fontWeight: FontWeight.w800,
+                fontSize: 30.0,
+                color: Colors.teal
+          )),
           actions: [
             IconButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const Scanner(),
-                  ),
-                );
-              },
-              icon: const Icon(
-                Icons.add_a_photo,
-              ),
-            ),
-            IconButton(
-              icon: const Icon(Icons.settings),
+              icon: const Icon(Icons.settings_suggest),
+              iconSize: 35.0,
+              color: Colors.teal,
               onPressed: () {
                 // Navigate to the settings page. If the user leaves and returns
                 // to the app after it has been killed while running in the
@@ -97,22 +98,42 @@ class _BalancesWidgetState extends State<HomePageView>
             Container(
               padding: const EdgeInsets.all(20.0),
               child: Align(
-                alignment: Alignment.bottomRight,
-                child: IconButton(
-                  onPressed: () {
-                    Navigator.restorablePushNamed(
-                        context, AddExpenseView.routeName);
-                  },
-                  icon: const Icon(
-                    Icons.add_circle_outline,
-                    size: 60,
-                  ),
-                ),
-              ),
+                alignment: Alignment.bottomCenter,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const Scanner(),
+                            ),
+                          );
+                        },
+                        icon: const Icon(
+                          Icons.qr_code_scanner_rounded,
+                          size: 50,
+                          color: Colors.teal,
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          Navigator.restorablePushNamed(
+                              context, AddExpenseView.routeName);
+                        },
+                        icon: const Icon(
+                          Icons.add_rounded,
+                          size: 50,
+                          color: Colors.teal,
+                        ),
+                      ),
+                    ],
+                    
+                  )),
             ),
           ],
         ));
-  }
+}
 }
 
 class Balance {
@@ -143,7 +164,7 @@ class ExpensesList extends StatelessWidget {
                 title: Text('${item.name}'),
                 leading: const CircleAvatar(
                   // Display the Flutter Logo image asset.
-                  foregroundImage: AssetImage('assets/images/flutter_logo.png'),
+                  foregroundImage: AssetImage('assets/images/random_png.png'),
                 ));
           },
         );

@@ -69,7 +69,7 @@ class _ExpenseWidgetState extends State<AddExpenseView> {
           Align(
             alignment: Alignment.bottomRight,
             child: TextButton(
-              style: TextButton.styleFrom(backgroundColor: Colors.amber),
+              style: TextButton.styleFrom(backgroundColor: Colors.greenAccent),
               onPressed: () {
                 createExpense();
                 Navigator.pop(context);
