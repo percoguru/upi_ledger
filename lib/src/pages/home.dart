@@ -132,7 +132,7 @@ class _BalancesWidgetState extends State<HomePageView>
                   )),
             ),
           ],
-        ),);
+        ));
 }
 }
 
@@ -164,7 +164,7 @@ class ExpensesList extends StatelessWidget {
                 title: Text('${item.name}'),
                 leading: const CircleAvatar(
                   // Display the Flutter Logo image asset.
-                  foregroundImage: AssetImage('assets/images/'),
+                  foregroundImage: AssetImage('assets/images/random_png.png'),
                 ));
           },
         );
