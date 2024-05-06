@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/src/models/BalanceModel.dart';
-import 'package:flutter_application_1/src/pages/contacts/contacts_view.dart';
-import 'package:flutter_application_1/src/pages/home.dart';
-import 'package:flutter_application_1/src/pages/settings/settings_view.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:uuid/v4.dart';
 

@@ -6,7 +6,6 @@ class TransactionDetails {
   static const String _currency = 'INR';
   static const int _maxAmount = 100000;
 
-  final UpiApplication upiApplication;
   final String payeeAddress;
   final String payeeName;
   final String transactionRef;
@@ -17,7 +16,6 @@ class TransactionDetails {
   final String? transactionNote;
 
   TransactionDetails({
-    required this.upiApplication,
     required this.payeeAddress,
     required this.payeeName,
     required this.transactionRef,
@@ -47,7 +45,6 @@ class TransactionDetails {
 
   Map<String, dynamic> toJson() {
     return {
-      'app': upiApplication.toString(),
       'pa': payeeAddress,
       'pn': payeeName,
       'tr': transactionRef,
