@@ -3,6 +3,7 @@ import 'package:flutter_application_1/src/models/BalanceModel.dart';
 import 'package:flutter_application_1/src/pages/addExpense/add_expense.dart';
 import 'package:flutter_application_1/src/pages/contacts/contacts_view.dart';
 import 'package:flutter_application_1/src/pages/settings/settings_view.dart';
+import 'package:flutter_application_1/src/scanner/scanner.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:provider/provider.dart';
 
@@ -14,20 +15,14 @@ class HomePageView extends StatefulWidget {
   State<HomePageView> createState() => _BalancesWidgetState();
 }
 
-class _BalancesWidgetState extends State<HomePageView> {
+class _BalancesWidgetState extends State<HomePageView>
+    with WidgetsBindingObserver {
   List<Balance> _balances = [Balance(1, Contact(), 12)];
 
   @override
   void initState() {
     super.initState();
-    // fetchContacts();
   }
-
-  // void fetchContacts() async {
-  //   setState(() {
-  //     _balances = [];
-  //   });
-  // }
 
   // ···
   @override
@@ -36,7 +31,7 @@ class _BalancesWidgetState extends State<HomePageView> {
     List<Expense> expenses = balancesModel.expenses;
     return Scaffold(
         appBar: AppBar(
-          title: Text('Splitty'),
+          title: const Text('Splitty'),
           actions: [
             IconButton(
               icon: const Icon(Icons.settings),
@@ -71,18 +66,34 @@ class _BalancesWidgetState extends State<HomePageView> {
             Container(
               padding: const EdgeInsets.all(20.0),
               child: Align(
-                alignment: Alignment.bottomRight,
-                child: IconButton(
-                  onPressed: () {
-                    Navigator.restorablePushNamed(
-                        context, AddExpenseView.routeName);
-                  },
-                  icon: const Icon(
-                    Icons.add_circle_outline,
-                    size: 60,
-                  ),
-                ),
-              ),
+                  alignment: Alignment.bottomRight,
+                  child: Row(
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const Scanner(),
+                            ),
+                          );
+                        },
+                        icon: const Icon(
+                          Icons.add_a_photo,
+                          size: 60,
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          Navigator.restorablePushNamed(
+                              context, AddExpenseView.routeName);
+                        },
+                        icon: const Icon(
+                          Icons.add_circle_outline,
+                          size: 60,
+                        ),
+                      ),
+                    ],
+                  )),
             ),
           ],
         ));
