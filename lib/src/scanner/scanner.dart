@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/src/helpers/transaction.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 class Scanner extends StatefulWidget {
@@ -29,6 +30,20 @@ class _ScannerState extends State<Scanner> {
 
   void _handleBarcode(BarcodeCapture barcodes) {
     if (mounted) {
+      String? url = barcodes.barcodes.firstOrNull?.displayValue;
+
+      if (url != null) {
+        var uri = Uri.dataFromString(url);
+        // uri.query
+        var data = UriData.fromUri(uri);
+
+        Transaction.initializeTransaction(
+            receiverUpiAddress: uri.queryParameters['pa'] ?? '',
+            receiverName: uri.queryParameters['pn'] ?? '',
+            transactionRef: uri.queryParameters['tr'] ?? '',
+            amount: uri.queryParameters['cu'] ?? '234');
+        print('[please see here] $data ${uri.queryParameters}');
+      }
       setState(() {
         _barcode = barcodes.barcodes.firstOrNull;
       });

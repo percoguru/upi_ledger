@@ -22,20 +22,31 @@ class MainActivity: FlutterActivity() {
       call, result ->
       
         if (call.method == "initializeTransaction") {
+            val app: String? = call.argument("app")
+            // TODO: Use App
+            val pa: String? = call.argument("pa")
+            val pn: String? = call.argument("pn")
+            val mc: String? = call.argument("mc")
+            val tr: String? = call.argument("tr")
+            val tn: String? = call.argument("tn")
+            val am: String? = call.argument("am")
+            val cu: String? = call.argument("cu")
+            val url: String? = call.argument("url")
+
             val GOOGLE_PAY_PACKAGE_NAME = "com.google.android.apps.nbu.paisa.user"
             val GOOGLE_PAY_REQUEST_CODE = 123
             
             val uri = Uri.Builder()
                 .scheme("upi")
                 .authority("pay")
-                .appendQueryParameter("pa", "7011107463@ibl")
-                .appendQueryParameter("pn", "Gaurav Mehra")
-                .appendQueryParameter("mc", "")
-                .appendQueryParameter("tr", "your-transaction-ref-id")
-                .appendQueryParameter("tn", "your-transaction-note")
-                .appendQueryParameter("am", "234")
-                .appendQueryParameter("cu", "INR")
-                .appendQueryParameter("url", "your-transaction-url")
+                .appendQueryParameter("pa", pa)
+                .appendQueryParameter("pn", pn)
+                .appendQueryParameter("mc", mc)
+                .appendQueryParameter("tr", tr)
+                .appendQueryParameter("tn", tn)
+                .appendQueryParameter("am", am)
+                .appendQueryParameter("cu", cu)
+                .appendQueryParameter("url", url)
                 .build()
             
             val intent = Intent(Intent.ACTION_VIEW)
