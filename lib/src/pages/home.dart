@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_application_1/src/models/BalanceModel.dart';
 import 'package:flutter_application_1/src/pages/addExpense/add_expense.dart';
 import 'package:flutter_application_1/src/pages/contacts/contacts_view.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_application_1/src/pages/settings/settings_view.dart';
 import 'package:flutter_application_1/src/scanner/scanner.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:provider/provider.dart';
+import 'dart:async';
 
 class HomePageView extends StatefulWidget {
   const HomePageView({super.key});
@@ -18,6 +20,15 @@ class HomePageView extends StatefulWidget {
 class _BalancesWidgetState extends State<HomePageView>
     with WidgetsBindingObserver {
   List<Balance> _balances = [Balance(1, Contact(), 12)];
+
+  Future<void> openGPay() async {
+    const platform = MethodChannel('splitty-app');
+    try {
+      final result = await platform.invokeMethod<int>('initializeTransaction');
+    } on PlatformException catch (e) {
+      print("Failed to get battery level: '${e.message}'.");
+    }
+  }
 
   @override
   void initState() {
@@ -33,6 +44,18 @@ class _BalancesWidgetState extends State<HomePageView>
         appBar: AppBar(
           title: const Text('Splitty'),
           actions: [
+            IconButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const Scanner(),
+                  ),
+                );
+              },
+              icon: const Icon(
+                Icons.add_a_photo,
+              ),
+            ),
             IconButton(
               icon: const Icon(Icons.settings),
               onPressed: () {
@@ -63,37 +86,29 @@ class _BalancesWidgetState extends State<HomePageView>
         body: Stack(
           children: [
             const ExpensesList(),
+            Center(
+              child: TextButton(
+                child: const Text('Pay Gaurav Mehra'),
+                onPressed: () {
+                  openGPay();
+                },
+              ),
+            ),
             Container(
               padding: const EdgeInsets.all(20.0),
               child: Align(
-                  alignment: Alignment.bottomRight,
-                  child: Row(
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const Scanner(),
-                            ),
-                          );
-                        },
-                        icon: const Icon(
-                          Icons.add_a_photo,
-                          size: 60,
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          Navigator.restorablePushNamed(
-                              context, AddExpenseView.routeName);
-                        },
-                        icon: const Icon(
-                          Icons.add_circle_outline,
-                          size: 60,
-                        ),
-                      ),
-                    ],
-                  )),
+                alignment: Alignment.bottomRight,
+                child: IconButton(
+                  onPressed: () {
+                    Navigator.restorablePushNamed(
+                        context, AddExpenseView.routeName);
+                  },
+                  icon: const Icon(
+                    Icons.add_circle_outline,
+                    size: 60,
+                  ),
+                ),
+              ),
             ),
           ],
         ));
