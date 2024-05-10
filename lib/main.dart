@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/src/models/BalanceModel.dart';
-import 'package:flutter_application_1/src/models/contactsModel.dart';
+import 'package:flutter_application_1/src/stores/BalancesStore.dart';
+import 'package:flutter_application_1/src/stores/ContactsStore.dart';
+import 'package:flutter_application_1/src/stores/FriendsStore.dart';
 import 'package:flutter_application_1/src/pages/settings/settings_controller.dart';
 import 'package:flutter_application_1/src/pages/settings/settings_service.dart';
 import 'package:provider/provider.dart';
@@ -22,8 +23,9 @@ void main() async {
 
   runApp(
     MultiProvider(providers: [
-      Provider(create: (context) => ContactsModel()),
-      ChangeNotifierProvider(create: (context) => BalancesModel())
+      Provider(create: (context) => ContactsStore()),
+      ChangeNotifierProvider(create: (context) => BalancesStore()),
+      ChangeNotifierProvider(create: (context) => FriendsStore())
     ], child: MyApp(settingsController: settingsController)),
   );
 }

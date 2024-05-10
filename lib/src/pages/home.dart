@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_application_1/src/models/BalanceModel.dart';
-import 'package:flutter_application_1/src/pages/addExpense/add_expense.dart';
-import 'package:flutter_application_1/src/pages/contacts/contacts_view.dart';
+import 'package:flutter_application_1/src/stores/BalancesStore.dart';
+import 'package:flutter_application_1/src/stores/FriendsStore.dart';
+import 'package:flutter_application_1/src/pages/add_expense.dart';
+import 'package:flutter_application_1/src/pages/contacts_view.dart';
 import 'package:flutter_application_1/src/pages/settings/settings_view.dart';
-import 'package:flutter_application_1/src/scanner/scanner.dart';
+import 'package:flutter_application_1/src/pages/scanner/scanner.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';
@@ -26,7 +27,7 @@ class _BalancesWidgetState extends State<HomePageView>
     try {
       final result = await platform.invokeMethod<int>('initializeTransaction');
     } on PlatformException catch (e) {
-      print("Failed to get battery level: '${e.message}'.");
+      print("Failed to initialize transaction: '${e.message}'.");
     }
   }
 
@@ -38,22 +39,18 @@ class _BalancesWidgetState extends State<HomePageView>
   // ···
   @override
   Widget build(BuildContext context) {
-    BalancesModel balancesModel = context.read<BalancesModel>();
-    List<Expense> expenses = balancesModel.expenses;
     return Scaffold(
         appBar: AppBar(
           leading: const CircleAvatar(
-                  // Display the Flutter Logo image asset.
-                  foregroundImage: AssetImage('assets/images/random_png.png'),
-                ),
-          title: const Text(
-             "Splitty",
+            // Display the Flutter Logo image asset.
+            foregroundImage: AssetImage('assets/images/random_png.png'),
+          ),
+          title: const Text("Splitty",
               style: TextStyle(
-                fontFamily: AutofillHints.creditCardType,
-                fontWeight: FontWeight.w800,
-                fontSize: 30.0,
-                color: Colors.teal
-          )),
+                  fontFamily: AutofillHints.creditCardType,
+                  fontWeight: FontWeight.w800,
+                  fontSize: 30.0,
+                  color: Colors.teal)),
           actions: [
             IconButton(
               icon: const Icon(Icons.settings_suggest),
@@ -98,7 +95,7 @@ class _BalancesWidgetState extends State<HomePageView>
             Container(
               padding: const EdgeInsets.all(20.0),
               child: Align(
-                alignment: Alignment.bottomCenter,
+                  alignment: Alignment.bottomCenter,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -128,12 +125,11 @@ class _BalancesWidgetState extends State<HomePageView>
                         ),
                       ),
                     ],
-                    
                   )),
             ),
           ],
         ));
-}
+  }
 }
 
 class Balance {
@@ -148,17 +144,47 @@ class ExpensesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<BalancesModel>(
-      builder: (context, balancesModel, child) {
-        List<Expense> expenses = balancesModel.expenses;
+    return Consumer<BalancesStore>(
+      builder: (context, balancesStore, child) {
+        List<Expense> expenses = balancesStore.expenses;
+        return ListView.builder(
+          // Providing a restorationId allows the ListView to restore the
+          // scroll position when a user leaves and returns to the app after it
+          // has been killed while running in the background.
+          restorationId: 'friendsView',
+          itemCount: expenses.length,
+          itemBuilder: (BuildContext context, int index) {
+            final item = expenses[index];
+
+            return ListTile(
+                title: Text('${item.name}'),
+                leading: const CircleAvatar(
+                  // Display the Flutter Logo image asset.
+                  foregroundImage: AssetImage('assets/images/random_png.png'),
+                ));
+          },
+        );
+      },
+    );
+  }
+}
+
+class FriendsList extends StatelessWidget {
+  const FriendsList({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<FriendsStore>(
+      builder: (context, friendsModel, child) {
+        List<Friend> friends = friendsModel.friends;
         return ListView.builder(
           // Providing a restorationId allows the ListView to restore the
           // scroll position when a user leaves and returns to the app after it
           // has been killed while running in the background.
           restorationId: 'balancesView',
-          itemCount: expenses.length,
+          itemCount: friends.length,
           itemBuilder: (BuildContext context, int index) {
-            final item = expenses[index];
+            final item = friends[index];
 
             return ListTile(
                 title: Text('${item.name}'),

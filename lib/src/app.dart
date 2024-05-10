@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/src/pages/addExpense/add_expense.dart';
-import 'package:flutter_application_1/src/pages/contacts/contacts_view.dart';
+import 'package:flutter_application_1/src/pages/add_expense.dart';
+import 'package:flutter_application_1/src/pages/contacts_view.dart';
 import 'package:flutter_application_1/src/pages/home.dart';
 import 'package:flutter_application_1/src/pages/settings/settings_controller.dart';
 import 'package:flutter_application_1/src/pages/settings/settings_view.dart';

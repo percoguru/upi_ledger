@@ -2,7 +2,7 @@ import 'dart:collection';
 
 import 'package:flutter_contacts/flutter_contacts.dart';
 
-class ContactsModel {
+class ContactsStore {
   /// Internal, private state of the cart.
   List<Contact> _contacts = [];
   bool _permissionDenied = false;

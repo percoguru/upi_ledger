@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/src/models/BalanceModel.dart';
+import 'package:flutter_application_1/src/stores/BalancesStore.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:uuid/v4.dart';
 
@@ -26,15 +26,6 @@ class _ExpenseWidgetState extends State<AddExpenseView> {
   final nameController = TextEditingController();
   final amountController = TextEditingController();
 
-  void createExpense() {
-    String name = nameController.text;
-    double amount = double.parse(amountController.text);
-
-    var expense = Expense(UuidV4(), Contact(), amount, name);
-    BalancesModel balancesModel = context.read<BalancesModel>();
-    balancesModel.addExpense(expense);
-  }
-
   @override
   void initState() {
     super.initState();
@@ -43,6 +34,15 @@ class _ExpenseWidgetState extends State<AddExpenseView> {
   // ···
   @override
   Widget build(BuildContext context) {
+    void createExpense() {
+      String name = nameController.text;
+      double amount = double.parse(amountController.text);
+
+      var expense = Expense(UuidV4(), Contact(), amount, name);
+      BalancesStore balancesStore = context.read<BalancesStore>();
+      balancesStore.addExpense(expense);
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add Expense'),

@@ -1,8 +1,8 @@
 import 'dart:collection';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/src/pages/addExpense/add_expense.dart';
+import 'package:flutter_application_1/src/pages/add_expense.dart';
 
-class BalancesModel extends ChangeNotifier {
+class BalancesStore extends ChangeNotifier {
   /// Internal, private state of the cart.
   final List<Expense> _expenses = [];
 

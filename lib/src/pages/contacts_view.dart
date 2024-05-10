@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/src/models/contactsModel.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_application_1/src/stores/FriendsStore.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/v4.dart';
 
 class ContactsView extends StatefulWidget {
   const ContactsView({super.key});
@@ -27,7 +29,8 @@ class _ContactsWidgetState extends State<ContactsView> {
         _permissionDenied = true;
       });
     } else {
-      final contacts = await FlutterContacts.getContacts();
+      final contacts = await FlutterContacts.getContacts(
+          withPhoto: true, withThumbnail: true);
 
       setState(() {
         _contacts = contacts;
@@ -38,11 +41,9 @@ class _ContactsWidgetState extends State<ContactsView> {
   // ···
   @override
   Widget build(BuildContext context) {
-    ContactsModel contactsModel = context.read<ContactsModel>();
-    contactsModel.setContacts(_contacts);
+    FriendsStore friendsModel = context.read<FriendsStore>();
 
     if (_permissionDenied) {
-      contactsModel.setPermission(false);
       return const Center(child: Text('Permission Denied'));
     }
     if (_contacts.isEmpty) {
@@ -64,16 +65,19 @@ class _ContactsWidgetState extends State<ContactsView> {
         // scroll position when a user leaves and returns to the app after it
         // has been killed while running in the background.
         restorationId: 'sampleItemListView',
-        itemCount: contactsModel.contacts.length,
+        itemCount: _contacts.length,
         itemBuilder: (BuildContext context, int index) {
-          final contact = contactsModel.contacts[index];
+          final contact = _contacts[index];
 
           return ListTile(
             title: Text(contact.displayName),
-            leading: const CircleAvatar(
-              // Display the Flutter Logo image asset.
-              foregroundImage: AssetImage('assets/images/flutter_logo.png'),
-            ),
+            leading: CircleAvatar(
+                // Display the Flutter Logo image asset.
+                foregroundImage: MemoryImage(contact.photo ?? Uint8List(10))),
+            onTap: () {
+              friendsModel.addFriend(
+                  Friend(const UuidV4(), '', '', contact.displayName));
+            },
           );
         },
       ),
