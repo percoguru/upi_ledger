@@ -72,7 +72,15 @@ class MyApp extends StatelessWidget {
                   case ContactsView.routeName:
                     return const ContactsView();
                   case AddExpenseView.routeName:
-                    return const AddExpenseView();
+                    final arguments =
+                        (ModalRoute.of(context)?.settings.arguments ??
+                            <String, dynamic>{}) as Map;
+                    var amount = arguments['amount'];
+                    var upiAddress = arguments['upiAddress'];
+                    var name = arguments['name'];
+
+                    return AddExpenseView(
+                        amount: amount, upiAddress: upiAddress, name: name);
                   default:
                     return const HomePageView();
                 }

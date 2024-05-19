@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_application_1/src/helpers/transaction.dart';
 import 'package:flutter_application_1/src/stores/BalancesStore.dart';
 import 'package:flutter_application_1/src/stores/FriendsStore.dart';
 import 'package:flutter_application_1/src/pages/add_expense.dart';
 import 'package:flutter_application_1/src/pages/contacts_view.dart';
 import 'package:flutter_application_1/src/pages/settings/settings_view.dart';
-import 'package:flutter_application_1/src/pages/scanner/scanner.dart';
+import 'package:flutter_application_1/src/pages/scanner.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';
@@ -21,15 +22,6 @@ class HomePageView extends StatefulWidget {
 class _BalancesWidgetState extends State<HomePageView>
     with WidgetsBindingObserver {
   List<Balance> _balances = [Balance(1, Contact(), 12)];
-
-  Future<void> openGPay() async {
-    const platform = MethodChannel('splitty-app');
-    try {
-      final result = await platform.invokeMethod<int>('initializeTransaction');
-    } on PlatformException catch (e) {
-      print("Failed to initialize transaction: '${e.message}'.");
-    }
-  }
 
   @override
   void initState() {
@@ -84,14 +76,6 @@ class _BalancesWidgetState extends State<HomePageView>
         body: Stack(
           children: [
             const ExpensesList(),
-            Center(
-              child: TextButton(
-                child: const Text('Pay Gaurav Mehra'),
-                onPressed: () {
-                  openGPay();
-                },
-              ),
-            ),
             Container(
               padding: const EdgeInsets.all(20.0),
               child: Align(

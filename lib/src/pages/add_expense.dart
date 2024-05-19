@@ -6,8 +6,12 @@ import 'package:uuid/v4.dart';
 import 'package:provider/provider.dart';
 
 class AddExpenseView extends StatefulWidget {
-  const AddExpenseView({super.key});
+  AddExpenseView(
+      {super.key, this.upiAddress = '', this.amount = '', this.name = ''});
   static const routeName = '/expense';
+  String upiAddress;
+  String amount;
+  String name;
 
   @override
   State<AddExpenseView> createState() => _ExpenseWidgetState();
@@ -25,10 +29,26 @@ class Expense {
 class _ExpenseWidgetState extends State<AddExpenseView> {
   final nameController = TextEditingController();
   final amountController = TextEditingController();
+  final upiAddressController = TextEditingController();
+
+  bool amountReadOnly = false;
+  bool upiAddressReadOnly = false;
 
   @override
   void initState() {
     super.initState();
+  }
+
+  void populateStateData(String amount, String upiAddress, String name) {
+    amountController.text = amount;
+    upiAddressController.text = Uri.decodeComponent(upiAddress);
+    nameController.text = name;
+    if (amount.isNotEmpty) {
+      amountReadOnly = true;
+    }
+    if (upiAddress.isNotEmpty) {
+      upiAddressReadOnly = true;
+    }
   }
 
   // ···
@@ -43,6 +63,8 @@ class _ExpenseWidgetState extends State<AddExpenseView> {
       balancesStore.addExpense(expense);
     }
 
+    populateStateData(widget.amount, widget.upiAddress, widget.name);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add Expense'),
@@ -55,13 +77,24 @@ class _ExpenseWidgetState extends State<AddExpenseView> {
             showCursor: true,
             controller: nameController,
             decoration: const InputDecoration(
-              labelText: 'Name',
+              labelText: 'Expense Name',
               helperText: 'Just so we remember',
             ),
           ),
           TextField(
             showCursor: true,
+            controller: upiAddressController,
+            readOnly: upiAddressReadOnly,
+            enabled: !upiAddressReadOnly,
+            decoration: const InputDecoration(
+                labelText: 'UPI Address',
+                helperText: 'How much was the transaction'),
+          ),
+          TextField(
+            showCursor: true,
             controller: amountController,
+            readOnly: amountReadOnly,
+            enabled: !amountReadOnly,
             decoration: const InputDecoration(
                 labelText: 'Amount',
                 helperText: 'How much was the transaction'),
