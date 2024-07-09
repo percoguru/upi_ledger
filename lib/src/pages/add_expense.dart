@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/src/helpers/transaction.dart';
 import 'package:flutter_application_1/src/stores/BalancesStore.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:uuid/v4.dart';
@@ -6,12 +7,17 @@ import 'package:uuid/v4.dart';
 import 'package:provider/provider.dart';
 
 class AddExpenseView extends StatefulWidget {
-  AddExpenseView(
-      {super.key, this.upiAddress = '', this.amount = '', this.name = ''});
+  const AddExpenseView(
+      {super.key,
+      this.upiAddress = '',
+      this.amount = '',
+      this.name = '',
+      this.transactionRef = ''});
   static const routeName = '/expense';
-  String upiAddress;
-  String amount;
-  String name;
+  final String upiAddress;
+  final String amount;
+  final String name;
+  final String transactionRef;
 
   @override
   State<AddExpenseView> createState() => _ExpenseWidgetState();
@@ -30,6 +36,7 @@ class _ExpenseWidgetState extends State<AddExpenseView> {
   final nameController = TextEditingController();
   final amountController = TextEditingController();
   final upiAddressController = TextEditingController();
+  String transactionRef = '';
 
   bool amountReadOnly = false;
   bool upiAddressReadOnly = false;
@@ -39,10 +46,12 @@ class _ExpenseWidgetState extends State<AddExpenseView> {
     super.initState();
   }
 
-  void populateStateData(String amount, String upiAddress, String name) {
+  void populateStateData(
+      String amount, String upiAddress, String name, String transactionRef) {
     amountController.text = amount;
     upiAddressController.text = Uri.decodeComponent(upiAddress);
     nameController.text = name;
+    this.transactionRef = transactionRef;
     if (amount.isNotEmpty) {
       amountReadOnly = true;
     }
@@ -58,12 +67,22 @@ class _ExpenseWidgetState extends State<AddExpenseView> {
       String name = nameController.text;
       double amount = double.parse(amountController.text);
 
-      var expense = Expense(UuidV4(), Contact(), amount, name);
+      var expense = Expense(const UuidV4(), Contact(), amount, name);
       BalancesStore balancesStore = context.read<BalancesStore>();
       balancesStore.addExpense(expense);
     }
 
-    populateStateData(widget.amount, widget.upiAddress, widget.name);
+    void makePayment() {
+      createExpense();
+      Transaction.initializeTransaction(
+          receiverUpiAddress: upiAddressController.text,
+          receiverName: nameController.text,
+          transactionRef: transactionRef,
+          amount: amountController.text);
+    }
+
+    populateStateData(
+        widget.amount, widget.upiAddress, widget.name, widget.transactionRef);
 
     return Scaffold(
       appBar: AppBar(
@@ -104,7 +123,7 @@ class _ExpenseWidgetState extends State<AddExpenseView> {
             child: TextButton(
               style: TextButton.styleFrom(backgroundColor: Colors.greenAccent),
               onPressed: () {
-                createExpense();
+                makePayment();
                 Navigator.pop(context);
               },
               child: const Text('Save'),

@@ -78,9 +78,14 @@ class MyApp extends StatelessWidget {
                     var amount = arguments['amount'];
                     var upiAddress = arguments['upiAddress'];
                     var name = arguments['name'];
+                    var transactionRef = arguments['transactionRef'];
 
                     return AddExpenseView(
-                        amount: amount, upiAddress: upiAddress, name: name);
+                      amount: amount,
+                      upiAddress: upiAddress,
+                      name: name,
+                      transactionRef: transactionRef,
+                    );
                   default:
                     return const HomePageView();
                 }

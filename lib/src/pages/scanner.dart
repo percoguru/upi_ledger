@@ -46,7 +46,8 @@ class _ScannerState extends State<Scanner> {
               arguments: {
                 'upiAddress': receiverUpiAddress,
                 'name': receiverName,
-                'amount': amount
+                'amount': amount,
+                'transactionRef': transactionRef
               });
         }
         setState(() {
