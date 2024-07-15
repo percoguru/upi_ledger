@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/src/pages/add_expense.dart';
+import 'package:flutter_application_1/src/pages/auth/auth_controller.dart';
+import 'package:flutter_application_1/src/pages/auth/views/auth_view.dart';
+import 'package:flutter_application_1/src/pages/auth/views/signup_view.dart';
 import 'package:flutter_application_1/src/pages/contacts_view.dart';
 import 'package:flutter_application_1/src/pages/home.dart';
 import 'package:flutter_application_1/src/pages/settings/settings_controller.dart';
@@ -12,9 +15,11 @@ class MyApp extends StatelessWidget {
   const MyApp({
     super.key,
     required this.settingsController,
+    required this.authController,
   });
 
   final SettingsController settingsController;
+  final AuthController authController;
 
   @override
   Widget build(BuildContext context) {
@@ -86,8 +91,12 @@ class MyApp extends StatelessWidget {
                       name: name,
                       transactionRef: transactionRef,
                     );
+                  case SignUpPage.routeName:
+                    return const SignUpPage();
+                  case AuthView.routeName:
+                    return const AuthView();
                   default:
-                    return const HomePageView();
+                    return const AuthView();
                 }
               },
             );

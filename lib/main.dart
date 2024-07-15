@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/src/pages/auth/auth_controller.dart';
+import 'package:flutter_application_1/src/pages/auth/auth_service.dart';
 import 'package:flutter_application_1/src/stores/BalancesStore.dart';
 import 'package:flutter_application_1/src/stores/ContactsStore.dart';
 import 'package:flutter_application_1/src/stores/FriendsStore.dart';
@@ -12,6 +14,7 @@ void main() async {
   // Set up the SettingsController, which will glue user settings to multiple
   // Flutter Widgets.
   final settingsController = SettingsController(SettingsService());
+  final authController = AuthController();
 
   // Load the user's preferred theme while the splash screen is displayed.
   // This prevents a sudden theme change when the app is first displayed.
@@ -20,12 +23,17 @@ void main() async {
   // Run the app and pass in the SettingsController. The app listens to the
   // SettingsController for changes, then passes it further down to the
   // SettingsView.
+  await authController.initializeAuth();
 
   runApp(
-    MultiProvider(providers: [
-      Provider(create: (context) => ContactsStore()),
-      ChangeNotifierProvider(create: (context) => BalancesStore()),
-      ChangeNotifierProvider(create: (context) => FriendsStore())
-    ], child: MyApp(settingsController: settingsController)),
+    MultiProvider(
+        providers: [
+          Provider(create: (context) => ContactsStore()),
+          ChangeNotifierProvider(create: (context) => BalancesStore()),
+          ChangeNotifierProvider(create: (context) => FriendsStore())
+        ],
+        child: MyApp(
+            settingsController: settingsController,
+            authController: authController)),
   );
 }
